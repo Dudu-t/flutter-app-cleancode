@@ -12,11 +12,4 @@ class AuthencationParams {
   final String password;
 
   AuthencationParams({required this.email, required this.password});
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'email': email,
-      'password': password,
-    };
-  }
 }
