@@ -14,6 +14,7 @@ void main() {
   late HttpClientSpy httpClient;
   late String url;
   late AuthencationParams params;
+  late String accessToken;
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -27,9 +28,22 @@ void main() {
       email: faker.internet.email(),
       password: faker.internet.password(),
     );
+
+    accessToken = faker.guid.guid();
   });
 
   test('Should call HttpCLient with correct URL', () async {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenAnswer((_) async => {
+          'accessToken': accessToken,
+          'name': faker.person.name(),
+        });
+
     await sut.auth(params);
 
     verify(
@@ -88,5 +102,33 @@ void main() {
     ).thenThrow(HttpError.unauthorized);
 
     expect(() => sut.auth(params), throwsA(DomainError.invalidCredentials));
+  });
+
+  test('Should throw UnexpectedError if HttpClient return 500', () {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenThrow(HttpError.serverError);
+
+    expect(() => sut.auth(params), throwsA(DomainError.unexpected));
+  });
+  test('Should return an Account if HttpClient return 200', () async {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenAnswer((_) async => {
+          'accessToken': accessToken,
+          'name': faker.person.name(),
+        });
+
+    final account = await sut.auth(params);
+
+    expect(account.token, accessToken);
   });
 }
