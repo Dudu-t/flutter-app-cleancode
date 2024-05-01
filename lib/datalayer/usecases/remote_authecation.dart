@@ -1,4 +1,4 @@
-import 'package:fordevs/domain/entities/account_entitty.dart';
+import 'package:fordevs/domain/helpers/errors/domain_erors.dart';
 
 import '../../domain/usecases/usecases.dart';
 
@@ -11,11 +11,15 @@ class RemoteAuthentication {
   RemoteAuthentication({required this.httpClient, required this.url});
 
   Future<void> auth(AuthencationParams params) async {
-    await httpClient.request(
-      url: url,
-      method: 'post',
-      body: RemoteAuthencationParams.fromDomain(params).toMap(),
-    );
+    try {
+      await httpClient.request(
+        url: url,
+        method: 'post',
+        body: RemoteAuthencationParams.fromDomain(params).toMap(),
+      );
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
