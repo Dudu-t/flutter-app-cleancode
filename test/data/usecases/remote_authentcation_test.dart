@@ -66,4 +66,16 @@ void main() {
 
     expect(() => sut.auth(params), throwsA(DomainError.unexpected));
   });
+
+  test('Should throw UnexpectedError if HttpClient return 500', () {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenThrow(HttpError.serverError);
+
+    expect(() => sut.auth(params), throwsA(DomainError.unexpected));
+  });
 }
