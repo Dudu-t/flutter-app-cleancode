@@ -1,4 +1,4 @@
-import 'package:fordevs/domain/helpers/errors/domain_erors.dart';
+import 'package:fordevs/domain/helpers/helpers.dart';
 
 import '../../domain/usecases/usecases.dart';
 
@@ -17,8 +17,10 @@ class RemoteAuthentication {
         method: 'post',
         body: RemoteAuthencationParams.fromDomain(params).toMap(),
       );
-    } on HttpError {
-      throw DomainError.unexpected;
+    } on HttpError catch (error) {
+      throw error == HttpError.unauthorized
+          ? DomainError.invalidCredentials
+          : DomainError.unexpected;
     }
   }
 }

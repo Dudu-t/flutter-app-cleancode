@@ -1,11 +1,11 @@
 import 'package:faker/faker.dart';
-import 'package:fordevs/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:fordevs/datalayer/http/http.dart';
 import 'package:fordevs/datalayer/usecases/usecases.dart';
 import 'package:fordevs/domain/usecases/usecases.dart';
+import 'package:fordevs/domain/helpers/helpers.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
@@ -77,5 +77,16 @@ void main() {
     ).thenThrow(HttpError.serverError);
 
     expect(() => sut.auth(params), throwsA(DomainError.unexpected));
+  });
+  test('Should throw InvalidCredentials if HttpClient return 401', () {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenThrow(HttpError.unauthorized);
+
+    expect(() => sut.auth(params), throwsA(DomainError.invalidCredentials));
   });
 }
