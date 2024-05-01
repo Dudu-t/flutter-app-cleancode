@@ -1,3 +1,5 @@
+import 'package:fordevs/datalayer/http/http.dart';
+
 import '../../domain/entities/entities.dart';
 
 class RemoteAccountModel {
@@ -5,8 +7,11 @@ class RemoteAccountModel {
 
   RemoteAccountModel(this.accessToken);
 
-  factory RemoteAccountModel.fromMap(Map map) =>
-      RemoteAccountModel(map['accessToken']);
+  factory RemoteAccountModel.fromMap(Map map) {
+    if (!map.containsKey('accessToken')) throw HttpError.invalidData;
+
+    return RemoteAccountModel(map['accessToken']);
+  }
 
   AccountEntity toEntity() => AccountEntity(accessToken);
 }
