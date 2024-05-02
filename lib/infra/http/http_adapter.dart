@@ -27,6 +27,10 @@ class HttpAdapter implements HttpClient {
       body: jsonBody,
     );
 
+    return _handleResponse(response);
+  }
+
+  Map? _handleResponse(Response response) {
     switch (response.statusCode) {
       case 204:
         return null;
