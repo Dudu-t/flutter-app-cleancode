@@ -69,7 +69,7 @@ void main() {
     verify(
       httpClient.request(
         url: url,
-        method: 'post',
+        method: HttpMethod.post,
         body: {
           'email': params.email,
           'password': params.password,

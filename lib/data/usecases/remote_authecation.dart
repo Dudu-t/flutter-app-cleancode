@@ -15,7 +15,7 @@ class RemoteAuthentication implements Authentication {
     try {
       final httpResponse = await httpClient.request(
         url: url,
-        method: 'post',
+        method: HttpMethod.post,
         body: RemoteAuthencationParams.fromDomain(params).toMap(),
       );
 

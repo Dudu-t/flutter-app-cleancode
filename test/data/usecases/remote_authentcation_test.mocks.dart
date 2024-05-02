@@ -6,6 +6,7 @@
 import 'dart:async' as _i3;
 
 import 'package:fordevs/data/http/http_client.dart' as _i2;
+import 'package:fordevs/data/http/http_method.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -28,7 +29,7 @@ class MockHttpClient extends _i1.Mock implements _i2.HttpClient {
   @override
   _i3.Future<dynamic> request({
     required String? url,
-    required String? method,
+    required _i4.HttpMethod? method,
     Map<dynamic, dynamic>? body,
   }) =>
       (super.noSuchMethod(

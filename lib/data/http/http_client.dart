@@ -1,7 +1,9 @@
+import 'http_method.dart';
+
 abstract class HttpClient {
   Future<dynamic> request({
     required String url,
-    required String method,
+    required HttpMethod method,
     Map body,
   });
 }
