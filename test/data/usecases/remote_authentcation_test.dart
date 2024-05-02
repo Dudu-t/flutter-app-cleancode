@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -7,11 +8,12 @@ import 'package:fordevs/data/usecases/usecases.dart';
 import 'package:fordevs/domain/usecases/usecases.dart';
 import 'package:fordevs/domain/helpers/helpers.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+@GenerateNiceMocks([MockSpec<HttpClient>()])
+import 'remote_authentcation_test.mocks.dart';
 
 void main() {
   late RemoteAuthentication sut;
-  late HttpClientSpy httpClient;
+  late MockHttpClient httpClient;
   late String url;
   late AuthencationParams params;
   String accessToken = faker.guid.guid();
@@ -44,7 +46,7 @@ void main() {
 
  */
   setUp(() {
-    httpClient = HttpClientSpy();
+    httpClient = MockHttpClient();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(
       httpClient: httpClient,
