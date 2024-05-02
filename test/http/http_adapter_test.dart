@@ -12,27 +12,42 @@ class HttpAdapter {
   final Client client;
   HttpAdapter(this.client);
 
-  Future<Response> request({
-    required String? url,
-    required String? method,
-    Map? body,
+  Future<void> request({
+    required String url,
+    required String method,
   }) async {
-    if (url == null) throw HttpError.badRequest;
-
-    return await client.post(Uri.parse(url));
+    final headers = {
+      'Content-Type': 'application/json',
+      'accept': 'application/json',
+    };
+    await client.post(Uri.parse(url), headers: headers);
   }
 }
 
 void main() {
+  late MockClient client;
+  late HttpAdapter sut;
+  late String url;
+
+  setUp(() {
+    client = MockClient();
+    sut = HttpAdapter(client);
+    url = faker.internet.httpUrl();
+  });
+
   group('post', () {
     test('Should call post with correct values', () async {
-      final client = MockClient();
-      final sut = HttpAdapter(client);
-      final url = faker.internet.httpUrl();
-
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(Uri.parse(url)));
+      verify(
+        client.post(
+          Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+            'accept': 'application/json',
+          },
+        ),
+      );
     });
   });
 }
