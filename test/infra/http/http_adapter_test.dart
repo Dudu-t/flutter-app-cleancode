@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:faker/faker.dart';
-import 'package:fordevs/data/http/http_client.dart';
+import 'package:fordevs/infra/http/http_adapter.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -9,39 +9,6 @@ import 'package:test/test.dart';
 
 @GenerateNiceMocks([MockSpec<Client>()])
 import 'http_adapter_test.mocks.dart';
-
-class HttpAdapter implements HttpClient {
-  final Client client;
-  HttpAdapter(this.client);
-
-  Future<Map?> request({
-    required String url,
-    required String method,
-    Map? body,
-  }) async {
-    final headers = {
-      'Content-Type': 'application/json',
-      'accept': 'application/json',
-    };
-
-    final jsonBody = body != null ? jsonEncode(body) : null;
-
-    final response = await client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonBody,
-    );
-
-    switch (response.statusCode) {
-      case 204:
-        return null;
-    }
-
-    if (response.body.isEmpty) return null;
-
-    return jsonDecode(response.body);
-  }
-}
 
 void main() {
   late MockClient client;
