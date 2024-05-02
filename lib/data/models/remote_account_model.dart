@@ -1,4 +1,4 @@
-import 'package:fordevs/datalayer/http/http.dart';
+import 'package:fordevs/data/http/http.dart';
 
 import '../../domain/entities/entities.dart';
 
