@@ -2,8 +2,8 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:fordevs/datalayer/http/http.dart';
-import 'package:fordevs/datalayer/usecases/usecases.dart';
+import 'package:fordevs/data/http/http.dart';
+import 'package:fordevs/data/usecases/usecases.dart';
 import 'package:fordevs/domain/usecases/usecases.dart';
 import 'package:fordevs/domain/helpers/helpers.dart';
 
