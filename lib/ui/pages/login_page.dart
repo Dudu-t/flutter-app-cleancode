@@ -1,49 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import '../components/components.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              child: const Image(
-                image: AssetImage('lib/ui/assets/logo.png'),
-              ),
+            LoginHeader(),
+            Headline1(
+              text: 'Login',
             ),
-            const Text('Login'),
-            Form(
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      icon: Icon(
-                        Icons.email,
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        icon: Icon(
+                          Icons.email,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Senha',
-                      icon: Icon(
-                        Icons.password,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 32),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Senha',
+                          icon: Icon(
+                            Icons.password,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        obscureText: true,
                       ),
                     ),
-                    obscureText: true,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('ENTRAR'),
-                  ),
-                  TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.person),
-                    label: Text('Criar conta'),
-                  )
-                ],
+                    FilledButton(
+                      onPressed: () {},
+                      child: Text('Entrar'.toUpperCase()),
+                    ),
+                    TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.person),
+                      label: const Text('Criar conta'),
+                    )
+                  ],
+                ),
               ),
             )
           ],
