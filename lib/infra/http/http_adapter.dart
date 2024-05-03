@@ -14,22 +14,51 @@ class HttpAdapter implements HttpClient {
     required HttpMethod method,
     Map? body,
   }) async {
-    if (!_isValidMethod(method)) return _handleResponse(Response('', 500));
+    try {
+      if (!_isValidMethod(method)) return _handleResponse(Response('', 500));
 
+      final jsonBody = body != null ? jsonEncode(body) : null;
+      final Uri uri = Uri.parse(url);
+
+      final response = await _sendRequest(
+        sendHttpUri: uri,
+        sendHttpMethod: method,
+        sendBody: jsonBody,
+      );
+
+      return _handleResponse(response);
+    } catch (e) {
+      return _handleResponse(Response('', 500));
+    }
+  }
+
+  Future<Response> _sendRequest({
+    required sendHttpUri,
+    required HttpMethod sendHttpMethod,
+    String? sendBody,
+  }) async {
     final headers = {
       'Content-Type': 'application/json',
       'accept': 'application/json',
     };
 
-    final jsonBody = body != null ? jsonEncode(body) : null;
+    late Response response;
 
-    final response = await client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonBody,
-    );
+    switch (sendHttpMethod) {
+      case HttpMethod.get:
+        {
+          response = await client.get(sendHttpUri, headers: headers);
+          break;
+        }
+      case HttpMethod.post:
+        {
+          response =
+              await client.post(sendHttpUri, headers: headers, body: sendBody);
+          break;
+        }
+    }
 
-    return _handleResponse(response);
+    return response;
   }
 
   bool _isValidMethod(HttpMethod method) {
