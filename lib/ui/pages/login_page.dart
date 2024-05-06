@@ -46,6 +46,9 @@ class LoginPage extends StatelessWidget {
                     FilledButton(
                       onPressed: () {},
                       child: Text('Entrar'.toUpperCase()),
+                      style: FilledButton.styleFrom(
+                          // backgroundColor: Theme.of(context).primaryColor,
+                          ),
                     ),
                     TextButton.icon(
                       onPressed: () {},

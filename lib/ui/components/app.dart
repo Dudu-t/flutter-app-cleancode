@@ -14,7 +14,7 @@ class App extends StatelessWidget {
       theme: materialTheme.light(),
       darkTheme: materialTheme.dark(),
       themeMode: ThemeMode.system,
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }
