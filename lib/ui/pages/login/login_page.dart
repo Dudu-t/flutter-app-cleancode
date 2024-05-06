@@ -1,9 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import '../components/components.dart';
+import '../../components/components.dart';
+import '../pages.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  final LoginPresenter loginPresenter;
+  const LoginPage({
+    Key? key,
+    required this.loginPresenter,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +35,8 @@ class LoginPage extends StatelessWidget {
                           color: Theme.of(context).primaryColor,
                         ),
                       ),
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: loginPresenter.validateEmail,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 32),
@@ -41,14 +49,12 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         obscureText: true,
+                        onChanged: loginPresenter.validatePassword,
                       ),
                     ),
                     FilledButton(
                       onPressed: null,
                       child: Text('Entrar'.toUpperCase()),
-                      style: FilledButton.styleFrom(
-                          // backgroundColor: Theme.of(context).primaryColor,
-                          ),
                     ),
                     TextButton.icon(
                       onPressed: () {},

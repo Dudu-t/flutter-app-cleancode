@@ -27,6 +27,8 @@ class HttpAdapter implements HttpClient {
       );
 
       return _handleResponse(response);
+    } on HttpError {
+      rethrow;
     } catch (e) {
       return _handleResponse(Response('', 500));
     }
@@ -80,15 +82,15 @@ class HttpAdapter implements HttpClient {
       case 204:
         return null;
       case 400:
-        throw HttpError.badRequest;
+        return throw HttpError.badRequest;
       case 401:
-        throw HttpError.unauthorized;
+        return throw HttpError.unauthorized;
       case 403:
-        throw HttpError.forbidden;
+        return throw HttpError.forbidden;
       case 404:
-        throw HttpError.notFound;
+        return throw HttpError.notFound;
       default:
-        throw HttpError.serverError;
+        return throw HttpError.serverError;
     }
   }
 }
