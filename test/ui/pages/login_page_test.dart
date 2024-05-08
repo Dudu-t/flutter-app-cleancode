@@ -186,4 +186,17 @@ void main() {
 
     expect(filledButton.onPressed, isNotNull);
   });
+
+  testWidgets('Should enable button if form is valid', (widgetTester) async {
+    await loadPage(widgetTester);
+
+    isFormValidController.add(false);
+
+    await widgetTester.pump();
+
+    final filledButton =
+        widgetTester.widget<FilledButton>(find.byType(FilledButton));
+
+    expect(filledButton.onPressed, isNull);
+  });
 }
