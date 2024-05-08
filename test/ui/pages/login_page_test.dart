@@ -14,6 +14,7 @@ void main() {
   late LoginPresenter presenter;
   late StreamController<String?> emailErrorController;
   late StreamController<String?> passwordErrorController;
+  late StreamController<String?> mainErrorController;
   late StreamController<bool> isFormValidController;
   late StreamController<bool> isLoadingController;
 
@@ -21,6 +22,7 @@ void main() {
     presenter = MockLoginPresenter();
     emailErrorController = StreamController<String?>();
     passwordErrorController = StreamController<String?>();
+    mainErrorController = StreamController<String?>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
 
@@ -28,6 +30,8 @@ void main() {
         .thenAnswer((realInvocation) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
         .thenAnswer((realInvocation) => passwordErrorController.stream);
+    when(presenter.mainErrorStream)
+        .thenAnswer((realInvocation) => mainErrorController.stream);
     when(presenter.isFormValidStream)
         .thenAnswer((realInvocation) => isFormValidController.stream);
     when(presenter.isLoadingStream)
@@ -238,5 +242,16 @@ void main() {
     await widgetTester.pump();
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should present error message if authenticaiton fails',
+      (widgetTester) async {
+    await loadPage(widgetTester);
+
+    mainErrorController.add('main error');
+
+    await widgetTester.pump();
+
+    expect(find.text('main error'), findsOneWidget);
   });
 }
