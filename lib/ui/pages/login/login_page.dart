@@ -128,8 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                           builder: (context, snapshot) {
                             return FilledButton(
                               onPressed: snapshot.data == true
-                                  ? () {
-                                      widget.loginPresenter.auth();
+                                  ? () async {
+                                      await widget.loginPresenter.auth();
                                     }
                                   : null,
                               child: Text('Entrar'.toUpperCase()),
