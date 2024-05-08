@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,15 +12,24 @@ import 'login_page_test.mocks.dart';
 
 void main() {
   late LoginPresenter presenter;
+  late StreamController<String?> emailErrorController;
 
   Future<void> loadPage(WidgetTester widgetTester) async {
     presenter = MockLoginPresenter();
+    emailErrorController = StreamController<String?>();
+
+    when(presenter.emailErrorStream)
+        .thenAnswer((realInvocation) => emailErrorController.stream);
     final loginPage = MaterialApp(
         home: LoginPage(
       loginPresenter: presenter,
     ));
     await widgetTester.pumpWidget(loginPage);
   }
+
+  tearDown(() {
+    emailErrorController.close();
+  });
 
   testWidgets('Should load with correct initial state', (widgetTester) async {
     await loadPage(widgetTester);
@@ -68,5 +79,58 @@ void main() {
     await widgetTester.enterText(find.bySemanticsLabel('Senha'), password);
 
     verify(presenter.validatePassword(password));
+  });
+
+  testWidgets('Should present error if email is invalid', (widgetTester) async {
+    await loadPage(widgetTester);
+
+    emailErrorController.add('any error');
+    await widgetTester.pump();
+
+    expect(find.text('any error'), findsOneWidget);
+  });
+
+  testWidgets('Should present no error if email is valid',
+      (widgetTester) async {
+    await loadPage(widgetTester);
+
+    emailErrorController.add(null);
+    await widgetTester.pump();
+
+    final emailTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Email'),
+      matching: find.byType(
+        Text,
+      ),
+    );
+
+    expect(
+      emailTextChildren,
+      findsOneWidget,
+      reason:
+          'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the hint text',
+    );
+  });
+
+  testWidgets('Should present no error if email is valid',
+      (widgetTester) async {
+    await loadPage(widgetTester);
+
+    emailErrorController.add('');
+    await widgetTester.pump();
+
+    final emailTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Email'),
+      matching: find.byType(
+        Text,
+      ),
+    );
+
+    expect(
+      emailTextChildren,
+      findsOneWidget,
+      reason:
+          'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the hint text',
+    );
   });
 }
