@@ -225,4 +225,18 @@ void main() {
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
+
+  testWidgets('Should hide loading', (widgetTester) async {
+    await loadPage(widgetTester);
+
+    isLoadingController.add(true);
+
+    await widgetTester.pump();
+
+    isLoadingController.add(false);
+
+    await widgetTester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
 }
