@@ -15,12 +15,14 @@ void main() {
   late StreamController<String?> emailErrorController;
   late StreamController<String?> passwordErrorController;
   late StreamController<bool> isFormValidController;
+  late StreamController<bool> isLoadingController;
 
   Future<void> loadPage(WidgetTester widgetTester) async {
     presenter = MockLoginPresenter();
     emailErrorController = StreamController<String?>();
     passwordErrorController = StreamController<String?>();
     isFormValidController = StreamController<bool>();
+    isLoadingController = StreamController<bool>();
 
     when(presenter.emailErrorStream)
         .thenAnswer((realInvocation) => emailErrorController.stream);
@@ -28,6 +30,8 @@ void main() {
         .thenAnswer((realInvocation) => passwordErrorController.stream);
     when(presenter.isFormValidStream)
         .thenAnswer((realInvocation) => isFormValidController.stream);
+    when(presenter.isLoadingStream)
+        .thenAnswer((realInvocation) => isLoadingController.stream);
     final loginPage = MaterialApp(
         home: LoginPage(
       loginPresenter: presenter,
@@ -198,5 +202,27 @@ void main() {
         widgetTester.widget<FilledButton>(find.byType(FilledButton));
 
     expect(filledButton.onPressed, isNull);
+  });
+
+  testWidgets('Should call authetication on form submit', (widgetTester) async {
+    await loadPage(widgetTester);
+
+    isFormValidController.add(true);
+
+    await widgetTester.pump();
+    await widgetTester.tap(find.byType(FilledButton));
+    await widgetTester.pump();
+
+    verify(presenter.auth()).called(1);
+  });
+
+  testWidgets('Should present loading', (widgetTester) async {
+    await loadPage(widgetTester);
+
+    isLoadingController.add(true);
+
+    await widgetTester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
