@@ -13,13 +13,17 @@ import 'login_page_test.mocks.dart';
 void main() {
   late LoginPresenter presenter;
   late StreamController<String?> emailErrorController;
+  late StreamController<String?> passwordErrorController;
 
   Future<void> loadPage(WidgetTester widgetTester) async {
     presenter = MockLoginPresenter();
     emailErrorController = StreamController<String?>();
+    passwordErrorController = StreamController<String?>();
 
     when(presenter.emailErrorStream)
         .thenAnswer((realInvocation) => emailErrorController.stream);
+    when(presenter.passwordErrorStream)
+        .thenAnswer((realInvocation) => passwordErrorController.stream);
     final loginPage = MaterialApp(
         home: LoginPage(
       loginPresenter: presenter,
@@ -128,6 +132,38 @@ void main() {
 
     expect(
       emailTextChildren,
+      findsOneWidget,
+      reason:
+          'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the hint text',
+    );
+  });
+
+  testWidgets('Should present error if password is invalid',
+      (widgetTester) async {
+    await loadPage(widgetTester);
+
+    passwordErrorController.add('any error');
+    await widgetTester.pump();
+
+    expect(find.text('any error'), findsOneWidget);
+  });
+
+  testWidgets('Should present error if password is invalid',
+      (widgetTester) async {
+    await loadPage(widgetTester);
+
+    passwordErrorController.add('');
+    await widgetTester.pump();
+
+    final passwordTextChildren = find.descendant(
+      of: find.bySemanticsLabel('Senha'),
+      matching: find.byType(
+        Text,
+      ),
+    );
+
+    expect(
+      passwordTextChildren,
       findsOneWidget,
       reason:
           'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the hint text',
