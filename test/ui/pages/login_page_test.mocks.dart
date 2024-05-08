@@ -3,6 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i3;
+
 import 'package:fordevs/ui/pages/login/login_presenter.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -24,10 +26,26 @@ import 'package:mockito/mockito.dart' as _i1;
 /// See the documentation for Mockito's code generation for more information.
 class MockLoginPresenter extends _i1.Mock implements _i2.LoginPresenter {
   @override
+  _i3.Stream<bool> get isFormValidStream => (super.noSuchMethod(
+        Invocation.getter(#isFormValidStream),
+        returnValue: _i3.Stream<bool>.empty(),
+        returnValueForMissingStub: _i3.Stream<bool>.empty(),
+      ) as _i3.Stream<bool>);
+
+  @override
   void validateEmail(String? email) => super.noSuchMethod(
         Invocation.method(
           #validateEmail,
           [email],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void validatePassword(String? password) => super.noSuchMethod(
+        Invocation.method(
+          #validatePassword,
+          [password],
         ),
         returnValueForMissingStub: null,
       );
