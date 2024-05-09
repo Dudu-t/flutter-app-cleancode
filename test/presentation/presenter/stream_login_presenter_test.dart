@@ -27,6 +27,6 @@ void main() {
     final email = faker.internet.email();
     sut.validateEmail(email);
 
-    verify(validation.validate()).called(1);
+    verify(validation.validate(field: 'email', value: email)).called(1);
   });
 }
