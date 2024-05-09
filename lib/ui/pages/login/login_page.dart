@@ -35,15 +35,8 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         widget.loginPresenter.mainErrorStream?.listen((error) {
-          print('chegou aq');
           if (error != null) {
-            print('chegou aq');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red[900],
-                content: Text(error),
-              ),
-            );
+            showErrorMessage(context, error);
           }
         });
         return SingleChildScrollView(
