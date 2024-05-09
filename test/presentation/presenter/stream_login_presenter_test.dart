@@ -38,6 +38,18 @@ void main() {
   late StreamLoginPresenter sut;
   late MockValidation validation;
   late String email;
+
+  PostExpectation mockValidationCall(String? field) => when(
+        validation.validate(
+          field: field ?? anyNamed('field'),
+          value: anyNamed('value'),
+        ),
+      );
+
+  void mockValidation({String? field, String? value}) {
+    mockValidationCall(field).thenReturn(value);
+  }
+
   setUp(() {
     validation = MockValidation();
     sut = StreamLoginPresenter(validation: validation);
@@ -50,10 +62,7 @@ void main() {
   });
 
   test('Should email error if validation fails', () {
-    when(validation.validate(
-            field: anyNamed('field'), value: anyNamed('value')))
-        .thenReturn('error');
-
+    mockValidation(value: 'error');
     expectLater(sut.emailErrorStream, emits('error'));
     sut.validateEmail(email);
   });
