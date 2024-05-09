@@ -21,10 +21,15 @@ class StreamLoginPresenter {
 }
 
 void main() {
+  late StreamLoginPresenter sut;
+  late MockValidation validation;
+  late String email;
+  setUp(() {
+    validation = MockValidation();
+    sut = StreamLoginPresenter(validation: validation);
+    email = faker.internet.email();
+  });
   test('Should call validation with correct email', () {
-    final validation = MockValidation();
-    final sut = StreamLoginPresenter(validation: validation);
-    final email = faker.internet.email();
     sut.validateEmail(email);
 
     verify(validation.validate(field: 'email', value: email)).called(1);
