@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:faker/faker.dart';
+import 'package:fordevs/domain/entities/account_entitty.dart';
 import 'package:fordevs/domain/usecases/usecases.dart';
 import 'package:fordevs/presentation/presenters/presenters.dart';
 import 'package:fordevs/presentation/protocols/protocols.dart';
@@ -28,6 +29,11 @@ void main() {
   void mockValidation({String? field, String? value}) {
     mockValidationCall(field).thenReturn(value);
   }
+
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
+  void mockAuthentication() => mockAuthenticationCall()
+      .thenAnswer((_) async => AccountEntity(faker.guid.guid()));
 
   setUp(() {
     validation = MockValidation();
@@ -167,5 +173,14 @@ void main() {
     verify(authentication
             .auth(AuthencationParams(email: email, password: password)))
         .called(1);
+  });
+
+  test('Should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
   });
 }
