@@ -8,6 +8,13 @@ void main() {
 
     expect(error, null);
   });
+  test('Should return error if value is empty', () {
+    final sut = RequiredFieldValidation(field: 'any_field');
+
+    final error = sut.validate('');
+
+    expect(error, 'Campo obrigatório');
+  });
 }
 
 abstract class FieldValidation {
@@ -22,6 +29,6 @@ class RequiredFieldValidation implements FieldValidation {
 
   @override
   String? validate(String value) {
-    return null;
+    return value.isEmpty ? 'Campo obrigatório' : null;
   }
 }
