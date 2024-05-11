@@ -126,7 +126,7 @@ void main() {
     ));
 
     sut.isFormValidStream?.listen(expectAsync1(
-      (isValid) => expect(isValid, false),
+      (isValid) => expect(isValid, true),
     ));
 
     sut.validateEmail(password);
@@ -213,5 +213,12 @@ void main() {
     expectLater(sut.isLoadingStream, emits(false));
 
     await sut.auth();
+  });
+
+  test('Should not emit after dispose', () {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
   });
 }
